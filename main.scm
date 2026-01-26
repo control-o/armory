@@ -22,38 +22,37 @@
       "("  sw/quality sw/material " " sw/type
       (if (not (eq? sw/handle 'null))
         (string-append " with "  sw/handle " handle") "")
-      sw/quality ")")
-))
+      sw/quality ")")))
+
 
 
 (define (qarmory json query)
-  (print "type " (type query))
+  ; (print "type " (type query))
   (vector-map (lambda (x)
                 (pipe
                   x
                   (alget query #f)
                   print))
-                json))
+              json))
 
 (define (get-armory user? query?)
   (lets ((r w (popen (string-append "curl -s " url user?))) ; dont be evil
          (stream (port->byte-stream (fd->port r)))
          (json (parse-json stream)))
-         (if query?
-           (begin
-             (print user? "'s " query? "s") (qarmory json query?))
-           (begin
-             (print user? "'s armory")
-             (vector-map (lambda (sw) (pp-sword sw)) json)))
+        (if query?
+          (begin
+            (qarmory json query?))
+          (begin
+            (vector-map (lambda (sw) (pp-sword sw)) json)))
         0))
 
 (define rules
   (cl-rules
    `((help    "-h" "--help")
-     (user    "-u" "--user"  has-arg comment "user to fetch" default "ctrl_o")
+     (user    "-u" "--user"  has-arg comment "user to fetch")
      (query   "-q" "--query" has-arg comment "field to query")
-     (listing "-l" "--list"          comment "list fields to query (unimplemented)")
-     )))
+     (listing "-l" "--list"          comment "list fields to query (unimplemented)"))))
+     
 
 (define (help args)
   (print "usage: " (car args) " [args]")
@@ -63,7 +62,7 @@
    (process-arguments
      (cdr args) rules "limes cry D:"
      (λ (opt extra)
-        (print "opt: " (ff->list opt))
+        ; (print "opt: " (ff->list opt))
         (let ((user?    (get opt 'user #f))
               (query?   (get opt 'query #f))
               (listing? (get opt 'listing #f))
@@ -71,5 +70,5 @@
           (cond
             (help?    (help args))
             (listing? (print "unimplemented"))
-            (else     (get-armory user? query?)))
-          ))))
+            (else     (get-armory user? query?)))))))
+          
