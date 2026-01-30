@@ -20,7 +20,7 @@
 
     (print
       "("  sw/quality sw/material " " sw/type
-      (if (not (eq? sw/handle 'null))
+      (if sw/handle
         (string-append " with "  sw/handle " handle") "")
       sw/quality ")")))
 
