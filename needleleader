@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+grep -r --include='*.ar' "needle" . | sed 's/^.\/\(\w*\).*/\1/' | uniq -c | sort -n -r
