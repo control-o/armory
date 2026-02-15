@@ -41,8 +41,8 @@
          (data? (alget (parse-json stream) "data" #f)))
         (when data?
           (if query?
-            (qarmory json query?)
-            (vector-map (lambda (sw) (pp-sword sw)) json)))
+            (qarmory data? query?)
+            (vector-map (lambda (sw) (pp-sword sw)) data?)))
         0))
 
 (define rules
