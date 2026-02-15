@@ -38,11 +38,10 @@
 (define (get-armory user? query?)
   (lets ((r w (popen (string-append "curl -s " url user?))) ; dont be evil
          (stream (port->byte-stream (fd->port r)))
-         (json (parse-json stream)))
-        (if query?
-          (begin
-            (qarmory json query?))
-          (begin
+         (data? (alget (parse-json stream) "data" #f)))
+        (when data?
+          (if query?
+            (qarmory json query?)
             (vector-map (lambda (sw) (pp-sword sw)) json)))
         0))
 
